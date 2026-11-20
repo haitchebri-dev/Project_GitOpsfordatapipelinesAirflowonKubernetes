@@ -68,7 +68,14 @@ triggerer:
   replicas: 1
 
 workers:
-  enabled: false # Désactivé car KubernetesExecutor lance un pod par tâche
+  replicas: 0
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"
 
 statsd:
   enabled: true

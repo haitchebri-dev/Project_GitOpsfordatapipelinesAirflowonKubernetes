@@ -5,10 +5,20 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/haitchebri-dev/Project_GitOpsfordatapipelinesAirflowonKubernetes.git
-    targetRevision: main
-    path: overlays/dev
+  sources:
+    - repoURL: https://github.com/haitchebri-dev/Project_GitOpsfordatapipelinesAirflowonKubernetes.git
+      targetRevision: main
+      path: overlays/dev
+    - repoURL: https://airflow.apache.org
+      chart: airflow
+      targetRevision: 1.16.0
+      helm:
+        releaseName: airflow
+        valueFiles:
+          - $values/base/airflow-values.yaml
+    - repoURL: https://github.com/haitchebri-dev/Project_GitOpsfordatapipelinesAirflowonKubernetes.git
+      targetRevision: main
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: airflow-dev

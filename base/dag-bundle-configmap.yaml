@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: airflow-dag-bundle-info
+data:
+  BUNDLE_NAME: "dags-git-bundle"
+  GIT_REPO_URL: "https://github.com/haitchebri-dev/Project_GitOpsfordatapipelinesAirflowonKubernetes.git"

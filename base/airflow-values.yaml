@@ -1,0 +1,74 @@
+# Valeurs de base pour Airflow 3 avec KubernetesExecutor et DAG Bundles
+executor: KubernetesExecutor
+
+images:
+  airflow:
+    repository: apache/airflow
+    tag: "3.0.0"
+    pullPolicy: IfNotPresent
+
+# Secrets injectés via External Secrets Operator (jamais en clair dans Git)
+webserverSecretKeySecretName: airflow-secrets
+fernetKeySecretName: airflow-secrets
+
+data:
+  metadataSecretName: airflow-secrets
+
+# Configuration des DAG Bundles (Airflow 3) pour versionner chaque exécution
+config:
+  core:
+    executor: KubernetesExecutor
+    load_examples: "False"
+  dag_processor:
+    dag_bundle_config_list: >
+      [
+        {
+          "name": "dags-git-bundle",
+          "classpath": "airflow.providers.git.bundles.git.GitDagBundle",
+          "kwargs": {
+            "tracking_ref": "main",
+            "git_conn_id": "git_dags_repo",
+            "refresh_interval": 60
+          }
+        }
+      ]
+  metrics:
+    statsd_on: "True"
+    statsd_host: "airflow-statsd"
+    statsd_port: "9125"
+    statsd_prefix: "airflow"
+
+# Ressources allégées par défaut (adaptées au cluster local k3d)
+scheduler:
+  replicas: 1
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"
+
+webserver:
+  replicas: 1
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"
+
+dagProcessor:
+  enabled: true
+  replicas: 1
+
+triggerer:
+  enabled: true
+  replicas: 1
+
+workers:
+  enabled: false # Désactivé car KubernetesExecutor lance un pod par tâche
+
+statsd:
+  enabled: true

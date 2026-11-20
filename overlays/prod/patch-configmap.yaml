@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: airflow-dag-bundle-info
+data:
+  ENVIRONMENT: "prod"
+  TARGET_BRANCH: "main"

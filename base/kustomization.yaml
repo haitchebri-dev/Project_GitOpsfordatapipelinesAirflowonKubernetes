@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - external-secret.yaml
+  - dag-bundle-configmap.yaml
+
+helmCharts:
+  - name: airflow
+    repo: https://airflow.apache.org
+    version: 1.16.0
+    releaseName: airflow
+    includeCRDs: true
+    valuesFile: airflow-values.yaml

@@ -24,7 +24,7 @@ REQUIRED_TAGS = {"gitops", "airflow3"}
 
 @pytest.fixture(scope="module")
 def dag_bag() -> DagBag:
-    return DagBag(dag_folder=str(DAGS_DIR), include_examples=False)
+    return DagBag(dag_folder=str(DAGS_DIR))
 
 
 def test_no_import_errors(dag_bag: DagBag) -> None:
